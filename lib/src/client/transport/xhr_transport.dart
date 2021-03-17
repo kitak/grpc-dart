@@ -209,7 +209,7 @@ class XhrClientConnection extends ClientConnection {
       metadata['X-Grpc-Web'] = '1';
     }
 
-    var requestUri = uri.resolve(_removeLeadingSlash(path)).toString();
+    var requestUri = uri.resolve(_removeLeadingSlash(path));
     if (callOptions is WebCallOptions &&
         callOptions.bypassCorsPreflight == true) {
       requestUri = cors.moveHttpHeadersToQueryParam(metadata, requestUri);
