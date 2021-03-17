@@ -180,6 +180,21 @@ class XhrClientConnection extends ClientConnection {
     request.responseType = 'text';
   }
 
+  // When dart codes are generated from service.proto,
+  // it has a leading slash. Therefore, the path is ignored as it starts from
+  // the root URL. Hence, we remove the leading slash here.
+  //
+  // For example, we want to keep '/grpc/' path for gRPC web.
+  //
+  //   Uri.parse('http://localhost:6060/grpc/').resolve('abc/path')
+  //   // http://localhost:6060/grpc/abc/def
+  String _removeLeadingSlash(String path) {
+    if (path.startsWith("/")) {
+      return path.replaceFirst("/", "");
+    }
+    return path;
+  }
+
   @visibleForTesting
   HttpRequest createHttpRequest() => HttpRequest();
 
@@ -194,7 +209,7 @@ class XhrClientConnection extends ClientConnection {
       metadata['X-Grpc-Web'] = '1';
     }
 
-    var requestUri = uri.resolve(path);
+    var requestUri = uri.resolve(_removeLeadingSlash(path)).toString();
     if (callOptions is WebCallOptions &&
         callOptions.bypassCorsPreflight == true) {
       requestUri = cors.moveHttpHeadersToQueryParam(metadata, requestUri);
