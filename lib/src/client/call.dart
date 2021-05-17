@@ -326,7 +326,7 @@ class ClientCall<Q, R> implements Response {
       }
       _responses.onPause = subscription.pause;
       _responses.onResume = subscription.resume;
-      _responses.onCancel = cancel;
+      _responses.onCancel = subscription.cancel;
 
       _responseSubscription = subscription;
     }
