@@ -283,8 +283,10 @@ class ClientCall<Q, R> implements Response {
           _requestTimeline?.instant('Data sent', arguments: {
             'data': data.toString(),
           });
+          final serializedData = _method.requestSerializer(data);
+          _requestTimeline?.instant('Data serialized', arguments: {});
           _requestTimeline?.finish();
-          return _method.requestSerializer(data);
+          return serializedData;
         })
         .handleError(_onRequestError)
         .listen(stream.outgoingMessages.add,
@@ -376,8 +378,9 @@ class ClientCall<Q, R> implements Response {
         return;
       }
       try {
+        _responseTimeline?.instant('Data received', arguments: {});
         final decodedData = _method.responseDeserializer(data.data);
-        _responseTimeline?.instant('Data received', arguments: {
+        _responseTimeline?.instant('Data deserialized', arguments: {
           'data': decodedData.toString(),
         });
         _responses.add(decodedData);
