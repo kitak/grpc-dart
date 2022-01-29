@@ -60,7 +60,7 @@ export 'src/shared/codec_registry.dart';
 export 'src/shared/message.dart'
     show GrpcMessage, GrpcMetadata, GrpcData, grpcDecompressor;
 export 'src/shared/profiler.dart'
-    show isTimelineLoggingEnabled, timelineTaskFactory;
+    show isTimelineLoggingEnabled, timelineTaskFactory, TimelineTaskFactory;
 export 'src/shared/security.dart'
     show supportedAlpnProtocols, createSecurityContext;
 export 'src/shared/status.dart' show StatusCode, GrpcError;
