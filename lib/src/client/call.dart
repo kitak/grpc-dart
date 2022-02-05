@@ -283,8 +283,14 @@ class ClientCall<Q, R> implements Response {
           _requestTimeline?.instant('Data sent', arguments: {
             'data': data.toString(),
           });
+          final start = DateTime.now();
           final serializedData = _method.requestSerializer(data);
-          _requestTimeline?.instant('Data serialized', arguments: {});
+          final end = DateTime.now();
+          _requestTimeline?.instant('Data serialized', arguments: {
+            'duration':
+                (end.millisecondsSinceEpoch - start.millisecondsSinceEpoch) /
+                    1000
+          });
           _requestTimeline?.finish();
           return serializedData;
         })
@@ -379,9 +385,13 @@ class ClientCall<Q, R> implements Response {
       }
       try {
         _responseTimeline?.instant('Data received', arguments: {});
+        final start = DateTime.now();
         final decodedData = _method.responseDeserializer(data.data);
+        final end = DateTime.now();
         _responseTimeline?.instant('Data deserialized', arguments: {
           'data': decodedData.toString(),
+          'duration':
+              (end.millisecondsSinceEpoch - start.millisecondsSinceEpoch) / 1000
         });
         _responses.add(decodedData);
         _hasReceivedResponses = true;
